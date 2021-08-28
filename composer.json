@@ -5,7 +5,7 @@
         "email": "sonhaichu@gmail.com"
     }],
     "autoload": {
-        "classmap": [],
+        "classmap": ["src/app/"],
         "psr-4": {
             "VCComponent\\Laravel\\Promotion\\": "src/app"
         }
