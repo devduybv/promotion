@@ -3,6 +3,7 @@
 namespace VCComponent\Laravel\Promotion\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use VCComponent\Laravel\Promotion\Promotions\Promotion;
 use VCComponent\Laravel\Promotion\Repositories\PromotionInterface;
 use VCComponent\Laravel\Promotion\Repositories\PromotionReponsitory;
 
@@ -34,5 +35,6 @@ class PromotionServiceProvider extends ServiceProvider
     {
         //
         $this->app->bind(PromotionInterface::class, PromotionReponsitory::class);
+        $this->app->bind('promotion', Promotion::class);
     }
 }
