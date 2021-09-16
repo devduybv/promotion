@@ -77,8 +77,10 @@ class TestCase extends OrchestraTestCase
                 ],
             ],
             'frontend' => [
-                'middleware' => '',
-                'except' => [],
+                [
+                    'middleware' => '',
+                    'except' => [],
+                ],
             ],
         ]);
         $app['config']->set('api', [

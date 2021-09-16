@@ -121,4 +121,10 @@ class PromotionController extends ApiController
 
         return $this->response->item($promotion, new $this->transformer());
     }
+    public function checkCode(Request $request)
+    {
+        $this->validator->isValid($request, 'RULE_CODE');
+        $promotion = $this->repository->check($request->code);
+        return $this->response->item($promotion, new $this->transformer());
+    }
 }

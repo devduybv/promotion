@@ -14,7 +14,7 @@ class PromotionValidator extends AbstractValidator
             'start_date' => ['required', 'date'],
             'end_date' => ['date', 'after_or_equal:start_date'],
             'status' => ['required', 'numeric'],
-            'promo_type_id' => ['numeric', 'exists:promotion_type,id'],
+            'promo_type' => ['required', 'numeric', 'in:1,2'],
             'promo_value' => ['numeric'],
             'quantity' => ['numeric'],
         ],
@@ -24,9 +24,12 @@ class PromotionValidator extends AbstractValidator
             'start_date' => ['required', 'date'],
             'end_date' => ['date', 'after_or_equal:start_date'],
             'status' => ['required', 'numeric'],
-            'promo_type_id' => ['numeric', 'exists:promotion_type,id'],
+            'promo_type' => ['required', 'numeric', 'in:1,2'],
             'promo_value' => ['numeric'],
             'quantity' => ['numeric'],
+        ],
+        'RULE_CODE' => [
+            'code' => ['required'],
         ],
     ];
 }

@@ -28,7 +28,7 @@ class PromotionTransformer extends TransformerAbstract
             'start_date' => $model->start_date,
             'end_date' => $model->end_date,
             'status' => (int) $model->status,
-            'promo_type_id' => (int) $model->promo_type_id,
+            'promo_type' => (int) $model->promo_type,
             'promo_value' => (int) $model->promo_value,
             'quantity' => (int) $model->quantity,
             'timestamps' => [

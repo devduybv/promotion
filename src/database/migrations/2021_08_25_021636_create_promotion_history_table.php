@@ -18,7 +18,6 @@ class CreatePromotionHistoryTable extends Migration
             $table->integer('promo_id');
             $table->integer('customer_id')->nullable();
             $table->integer('order_id')->nullable();
-
             $table->timestamps();
         });
     }

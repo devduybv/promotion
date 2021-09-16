@@ -2,6 +2,7 @@
 
 namespace VCComponent\Laravel\Promotion\Test\Feature\Api\Promotion;
 
+use DateTime;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use VCComponent\Laravel\Promotion\Entities\Promotion;
 use VCComponent\Laravel\Promotion\Test\TestCase;
@@ -17,7 +18,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         factory(Promotion::class, 5)->create();
         $data = ['field' => '', 'from' => date('Y-m-d', strtotime('3-08-2021'))];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $this->assertRequired($response, 'Undefined variable: field');
     }
     /**
@@ -28,7 +29,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         factory(Promotion::class, 5)->create();
         $data = ['field' => 'test', 'from' => date('Y-m-d', strtotime('3-08-2021'))];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $this->assertRequired($response, 'Undefined variable: field');
     }
     /**
@@ -39,7 +40,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         factory(Promotion::class, 5)->create();
         $data = ['field' => 'updated', 'from' => ''];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $this->assertRequired($response, 'Data missing');
     }
     /**
@@ -54,7 +55,7 @@ class PromotionControllerTest extends TestCase
             unset($promotion['created_at']);
         }
         $data = ['field' => 'created', 'from' => date('Y-m-d', strtotime('02/08/2021'))];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $response->assertJsonFragment([
             'data' => [],
         ]);
@@ -72,7 +73,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         factory(Promotion::class, 5)->create();
         $data = ['field' => 'updated', 'from' => '3/8/2021'];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $response->assertStatus(500);
     }
     /**
@@ -83,7 +84,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         factory(Promotion::class, 5)->create();
         $data = ['field' => '', 'to' => date('Y-m-d', strtotime('3-08-2021'))];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $this->assertRequired($response, 'Undefined variable: field');
     }
     /**
@@ -94,7 +95,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         factory(Promotion::class, 5)->create();
         $data = ['field' => 'test', 'to' => date('Y-m-d', strtotime('3-08-2021'))];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $this->assertRequired($response, 'Undefined variable: field');
     }
     /**
@@ -105,7 +106,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         factory(Promotion::class, 5)->create();
         $data = ['field' => 'updated', 'to' => ''];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $this->assertRequired($response, 'Data missing');
     }
     /**
@@ -116,7 +117,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         factory(Promotion::class, 5)->create();
         $data = ['field' => 'updated', 'to' => '3/8/2021'];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $response->assertStatus(500);
     }
     /**
@@ -131,7 +132,7 @@ class PromotionControllerTest extends TestCase
             unset($promotion['created_at']);
         }
         $data = ['field' => 'created', 'to' => date('Y-m-d', strtotime('02/08/2021'))];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $response->assertJsonFragment([
             'data' => [],
         ]);
@@ -149,7 +150,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         $promotions = factory(Promotion::class, 5)->create()->toArray();
         $data = ['status' => ''];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $this->assertRequired($response, 'The input status is incorrect');
     }
     /**
@@ -161,7 +162,7 @@ class PromotionControllerTest extends TestCase
         $promotions = factory(Promotion::class, 5)->create()->toArray();
         factory(Promotion::class, 5)->create(['status' => 2])->toArray();
         $data = ['status' => 1];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $response->assertJsonFragment([
             'status' => 1,
         ]);
@@ -187,7 +188,7 @@ class PromotionControllerTest extends TestCase
 
         $constraints = '{"title":"' . $title_constraints . '"}';
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions?constraints=' . $constraints);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions?constraints=' . $constraints);
         $response->assertStatus(200);
         $response->assertJson([
             'data' => [$promotions[0]],
@@ -204,7 +205,7 @@ class PromotionControllerTest extends TestCase
         unset($promotion['created_at']);
         unset($promotion['updated_at']);
         unset($promotion['start_date']);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions?search=test_promotion');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions?search=test_promotion');
         $response->assertStatus(200);
         $response->assertJson([
             'data' => [$promotion],
@@ -229,7 +230,7 @@ class PromotionControllerTest extends TestCase
         $listId = array_column($promotions, 'id');
         array_multisort($listId, SORT_DESC, $promotions);
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions?order_by=' . $order_by);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions?order_by=' . $order_by);
         $response->assertStatus(200);
         $response->assertJson([
             'data' => $promotions,
@@ -251,7 +252,7 @@ class PromotionControllerTest extends TestCase
         $listId = array_column($promotions, 'id');
         array_multisort($listId, SORT_DESC, $promotions);
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions?page=1&?per_page=20');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions?page=1&?per_page=20');
         $response->assertStatus(200);
         $response->assertJson([
             'data' => $promotions,
@@ -283,7 +284,7 @@ class PromotionControllerTest extends TestCase
         $listId = array_column($promotions, 'id');
         array_multisort($listId, SORT_DESC, $promotions);
         $data = ['type' => 'products'];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions', $data);
         $response->assertStatus(200);
         $response->assertJson([
             'data' => $promotions,
@@ -300,7 +301,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $this->assertDatabaseMissing('promotions', ['id' => 1]);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('DELETE', 'api/promotions/1');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('DELETE', 'api/admin/promotions/1');
         $this->assertExits($response, 'promotion not found');
     }
     /**
@@ -315,7 +316,7 @@ class PromotionControllerTest extends TestCase
         unset($promotion['start_date']);
 
         $this->assertDatabaseHas('promotions', $promotion);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('DELETE', 'api/promotions/' . $promotion['id']);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('DELETE', 'api/admin/promotions/' . $promotion['id']);
         $response->assertStatus(200);
         $this->assertDatabaseMissing('promotions', $promotion);
 
@@ -327,7 +328,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['code' => ''])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'code', 'The code field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -338,7 +339,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['start_date' => ''])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'start_date', 'The start date field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -349,7 +350,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['title' => ''])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'title', 'The title field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -360,10 +361,11 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['status' => ''])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'status', 'The status field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
+
     /**
      * @test
      */
@@ -373,7 +375,7 @@ class PromotionControllerTest extends TestCase
         factory(Promotion::class)->create(['code' => 'codetest']);
         $this->assertDatabaseHas('promotions', ['code' => 'codetest']);
         $data = factory(Promotion::class)->make(['code' => 'codetest'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'code', 'The code has already been taken.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -384,7 +386,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['start_date' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'start_date', 'The start date is not a valid date.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -395,7 +397,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['end_date' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'end_date', 'The end date is not a valid date.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -406,7 +408,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['start_date' => '2/1/2021', 'end_date' => '1/1/2021'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'end_date', 'The end date must be a date after or equal to start date.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -417,31 +419,41 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['status' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'status', 'The status must be a number.');
         $this->assertDatabaseMissing('promotions', $data);
     }
     /**
      * @test
      */
-    public function should_not_create_promotion_id_type_by_admin_router()
+    public function should_not_create_promotion_type_required_by_admin_router()
     {
         $token = $this->loginToken();
-        $data = factory(Promotion::class)->make(['promo_type_id' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
-        $this->assertValidator($response, 'promo_type_id', 'The promo type id must be a number.');
+        $data = factory(Promotion::class)->make(['promo_type' => ''])->toArray();
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
+        $this->assertValidator($response, 'promo_type', 'The promo type field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
     /**
      * @test
      */
-    public function should_not_create_promotion_id_type_not_exits_by_admin_router()
+    public function should_not_create_promotion_type_not_rule_by_admin_router()
     {
         $token = $this->loginToken();
-        $this->assertDatabaseMissing('promotion_type', ['id' => 1]);
-        $data = factory(Promotion::class)->make(['promo_type_id' => 1])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
-        $this->assertValidator($response, 'promo_type_id', 'The selected promo type id is invalid.');
+        $data = factory(Promotion::class)->make(['promo_type' => 3])->toArray();
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
+        $this->assertValidator($response, 'promo_type', 'The selected promo type is invalid.');
+        $this->assertDatabaseMissing('promotions', $data);
+    }
+    /**
+     * @test
+     */
+    public function should_not_create_promotion_type_by_admin_router()
+    {
+        $token = $this->loginToken();
+        $data = factory(Promotion::class)->make(['promo_type' => 'test'])->toArray();
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
+        $this->assertValidator($response, 'promo_type', 'The promo type must be a number.');
         $this->assertDatabaseMissing('promotions', $data);
     }
     /**
@@ -451,7 +463,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['promo_value' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'promo_value', 'The promo value must be a number.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -462,7 +474,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make(['quantity' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $this->assertValidator($response, 'quantity', 'The quantity must be a number.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -473,7 +485,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $data = factory(Promotion::class)->make()->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/promotions', $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('POST', 'api/admin/promotions', $data);
         $response->assertStatus(200);
         $this->assertDatabaseHas('promotions', $data);
     }
@@ -484,7 +496,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $this->assertDatabaseMissing('promotions', ['id' => 1]);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions/1');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions/1');
         $this->assertExits($response, 'Promotions not found');
     }
     /**
@@ -497,7 +509,7 @@ class PromotionControllerTest extends TestCase
         unset($promotion['created_at']);
         unset($promotion['updated_at']);
         unset($promotion['start_date']);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/promotions/' . $promotion['id']);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions/' . $promotion['id']);
         $response->assertStatus(200);
         $response->assertJson(['data' => $promotion]);
     }
@@ -509,7 +521,7 @@ class PromotionControllerTest extends TestCase
     {
         $token = $this->loginToken();
         $this->assertDatabaseMissing('promotions', ['id' => 1]);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/1');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/1');
         $this->assertExits($response, 'promotion not found');
     }
     /**
@@ -523,7 +535,7 @@ class PromotionControllerTest extends TestCase
         $this->assertDatabaseHas('promotions', ['code' => 'codetest']);
         $promotion = factory(Promotion::class)->create()->toArray();
         $data = ['code' => 'codetest'];
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'code', 'The code has already been taken.');
 
     }
@@ -535,7 +547,7 @@ class PromotionControllerTest extends TestCase
         $token = $this->loginToken();
         $promotion = factory(Promotion::class)->create()->toArray();
         $data = factory(Promotion::class)->make(['code' => ''])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'code', 'The code field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -548,7 +560,7 @@ class PromotionControllerTest extends TestCase
         $promotion = factory(Promotion::class)->create()->toArray();
 
         $data = factory(Promotion::class)->make(['start_date' => ''])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'start_date', 'The start date field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -561,10 +573,11 @@ class PromotionControllerTest extends TestCase
         $promotion = factory(Promotion::class)->create()->toArray();
 
         $data = factory(Promotion::class)->make(['title' => ''])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'title', 'The title field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
+
     /**
      * @test
      */
@@ -574,7 +587,7 @@ class PromotionControllerTest extends TestCase
         $promotion = factory(Promotion::class)->create()->toArray();
 
         $data = factory(Promotion::class)->make(['status' => ''])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'status', 'The status field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -587,7 +600,7 @@ class PromotionControllerTest extends TestCase
         $promotion = factory(Promotion::class)->create()->toArray();
 
         $data = factory(Promotion::class)->make(['start_date' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'start_date', 'The start date is not a valid date.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -600,7 +613,7 @@ class PromotionControllerTest extends TestCase
         $promotion = factory(Promotion::class)->create()->toArray();
 
         $data = factory(Promotion::class)->make(['end_date' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'end_date', 'The end date is not a valid date.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -613,7 +626,7 @@ class PromotionControllerTest extends TestCase
         $promotion = factory(Promotion::class)->create()->toArray();
 
         $data = factory(Promotion::class)->make(['start_date' => '2/1/2021', 'end_date' => '1/1/2021'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'end_date', 'The end date must be a date after or equal to start date.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -626,35 +639,45 @@ class PromotionControllerTest extends TestCase
         $promotion = factory(Promotion::class)->create()->toArray();
 
         $data = factory(Promotion::class)->make(['status' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'status', 'The status must be a number.');
         $this->assertDatabaseMissing('promotions', $data);
     }
     /**
      * @test
      */
-    public function should_not_update_promotion_id_type_by_admin_router()
+    public function should_not_update_promotion_type_required_by_admin_router()
     {
         $token = $this->loginToken();
         $promotion = factory(Promotion::class)->create()->toArray();
-
-        $data = factory(Promotion::class)->make(['promo_type_id' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
-        $this->assertValidator($response, 'promo_type_id', 'The promo type id must be a number.');
+        $data = factory(Promotion::class)->make(['promo_type' => ''])->toArray();
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
+        $this->assertValidator($response, 'promo_type', 'The promo type field is required.');
         $this->assertDatabaseMissing('promotions', $data);
     }
     /**
      * @test
      */
-    public function should_not_update_promotion_id_type_not_exits_by_admin_router()
+    public function should_not_update_promotion_type_not_rule_by_admin_router()
+    {
+        $token = $this->loginToken();
+        $promotion = factory(Promotion::class)->create()->toArray();
+        $data = factory(Promotion::class)->make(['promo_type' => 3])->toArray();
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
+        $this->assertValidator($response, 'promo_type', 'The selected promo type is invalid.');
+        $this->assertDatabaseMissing('promotions', $data);
+    }
+    /**
+     * @test
+     */
+    public function should_not_update_promotion_type_by_admin_router()
     {
         $token = $this->loginToken();
         $promotion = factory(Promotion::class)->create()->toArray();
 
-        $this->assertDatabaseMissing('promotion_type', ['id' => 1]);
-        $data = factory(Promotion::class)->make(['promo_type_id' => 1])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
-        $this->assertValidator($response, 'promo_type_id', 'The selected promo type id is invalid.');
+        $data = factory(Promotion::class)->make(['promo_type' => 'test'])->toArray();
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
+        $this->assertValidator($response, 'promo_type', 'The promo type must be a number.');
         $this->assertDatabaseMissing('promotions', $data);
     }
     /**
@@ -666,7 +689,7 @@ class PromotionControllerTest extends TestCase
         $promotion = factory(Promotion::class)->create()->toArray();
 
         $data = factory(Promotion::class)->make(['promo_value' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'promo_value', 'The promo value must be a number.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -679,7 +702,7 @@ class PromotionControllerTest extends TestCase
         $promotion = factory(Promotion::class)->create()->toArray();
 
         $data = factory(Promotion::class)->make(['quantity' => 'test'])->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $this->assertValidator($response, 'quantity', 'The quantity must be a number.');
         $this->assertDatabaseMissing('promotions', $data);
     }
@@ -695,11 +718,71 @@ class PromotionControllerTest extends TestCase
         unset($promotion['created_at']);
         $promotion->title = "update title";
         $data = $promotion->toArray();
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/promotions/' . $promotion['id'], $data);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('PUT', 'api/admin/promotions/' . $promotion['id'], $data);
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'title' => $data['title'],
         ]);
         $this->assertDatabaseHas('promotions', $data);
+    }
+    /**
+     * @test
+     */
+    public function should_not_check_promotion_code_field_required_by_admin()
+    {
+        $token = $this->loginToken();
+        $data = ['code' => ''];
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions/check', $data);
+        $this->assertValidator($response, 'code', 'The code field is required.');
+    }
+    /**
+     * @test
+     */
+    public function should_not_check_promotion_code_not_exits_by_admin()
+    {
+        $token = $this->loginToken();
+
+        $this->assertDatabaseMissing('promotions', ['code' => 'test']);
+        $data = ['code' => 'test'];
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions/check', $data);
+        $this->assertExits($response, 'Promotion not found');
+
+    }
+    /**
+     * @test
+     */
+    public function should_not_check_promotion_code_not_active_by_admin()
+    {
+        $token = $this->loginToken();
+
+        $promotion = factory(Promotion::class)->create(['status' => 2]);
+        $data = ['code' => $promotion->code];
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions/check', $data);
+        $this->assertRequired($response, 'Promo code has not been activated');
+    }
+    /**
+     * @test
+     */
+    public function should_not_check_promotion_date_expired_by_admin()
+    {
+        $token = $this->loginToken();
+
+        $promotion = factory(Promotion::class)->create(['end_date' => date('Y-m-d', strtotime('09/09/2021'))]);
+        $data = ['code' => $promotion->code];
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions/check', $data);
+        $this->assertRequired($response, 'Promo code has expired');
+    }
+    /**
+     * @test
+     */
+    public function should_not_check_promotion_date_not_start_by_admin()
+    {
+        $token = $this->loginToken();
+
+        $promotion = factory(Promotion::class)->create(['start_date' => new DateTime('tomorrow')]);
+        $data = ['code' => $promotion->code];
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->json('GET', 'api/admin/promotions/check', $data);
+        $this->assertRequired($response, 'Promo code has not started yet');
+
     }
 }

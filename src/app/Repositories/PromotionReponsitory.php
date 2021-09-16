@@ -3,6 +3,7 @@ namespace VCComponent\Laravel\Promotion\Repositories;
 
 use Exception;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Prettus\Repository\Eloquent\BaseRepository;
 use VCComponent\Laravel\Promotion\Entities\Promotion;
 use VCComponent\Laravel\Promotion\Repositories\PromotionInterface;
@@ -59,11 +60,9 @@ class PromotionReponsitory extends BaseRepository implements PromotionInterface
     {
         if ($request->has('field')) {
             if ($request->field === 'updated') {
-                $field = 'updated_at';
-            } elseif ($request->field === 'published') {
-                $field = 'published_date';
+                $field = 'promotions.updated_at';
             } elseif ($request->field === 'created') {
-                $field = 'created_at';
+                $field = 'promotions.created_at';
             } elseif ($request->field === 'start') {
                 $field = 'start_date';
             } elseif ($request->field === 'end') {
@@ -101,5 +100,34 @@ class PromotionReponsitory extends BaseRepository implements PromotionInterface
         }
         $promotion = $this->find($id);
         return $promotion;
+    }
+    public function findByCode($code)
+    {
+        $promotion = $this->findByField('code', $code)->first();
+        if (empty($promotion)) {
+            throw new NotFoundException('Promotion');
+        }
+        return $promotion;
+    }
+    public function check($code)
+    {
+        $promotion = $this->findByCode($code);
+        if ($promotion->isExpired()) {
+            throw new Exception('Promo code has expired');
+        }
+        if ($promotion->isStart()) {
+            throw new Exception('Promo code has not started yet');
+        }
+        if ($promotion->status !== 1) {
+            throw new Exception('Promo code has not been activated');
+        }
+        return $promotion;
+    }
+    public function getPromoRelation($id, $promo_type)
+    {
+        $query = DB::table('promotionables')->where('promoable_id', $id)
+            ->where('promoable_type', $promo_type)
+            ->join('promotions', 'promo_id', '=', 'promotions.id')->select("promotions.*");
+        return $query;
     }
 }

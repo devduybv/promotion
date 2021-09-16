@@ -14,4 +14,7 @@ interface PromotionInterface extends RepositoryInterface
     public function getFromDate($request, $query);
     public function getToDate($request, $query);
     public function findById($request, $id);
+    public function getPromoRelation($id, $promo_type);
+    public function findByCode($code);
+    public function check($promotion);
 }
